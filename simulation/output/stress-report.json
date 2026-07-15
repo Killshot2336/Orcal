@@ -1,0 +1,21 @@
+{
+  "verdict": "ZERO BUGS — stress suite passed",
+  "results": [
+    {
+      "name": "link-100-per-minute",
+      "ok": true,
+      "detail": "accepted=100, overflowRejected=true, softRejectsLogged=0"
+    },
+    {
+      "name": "loom-50mb-video",
+      "ok": true,
+      "detail": "stored50mb=true, blocked60mb=true"
+    },
+    {
+      "name": "vault-simultaneous",
+      "ok": true,
+      "detail": "unlockedBy=A+B"
+    }
+  ],
+  "generatedAt": "2026-07-15T23:44:51.942Z"
+}

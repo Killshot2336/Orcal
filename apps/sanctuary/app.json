@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "Sanctuary",
+    "slug": "sanctuary",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "sanctuary",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1A2421"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "app.sanctuary.bond",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Unlock your Sanctuary with presence.",
+        "UIBackgroundModes": ["remote-notification"]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1A2421"
+      },
+      "package": "app.sanctuary.bond"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-local-authentication"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "privacy": "No ads. No third-party analytics. End-to-end encrypted."
+    }
+  }
+}
