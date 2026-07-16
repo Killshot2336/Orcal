@@ -15,6 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Artifact deploy for when Pages source = GitHub Actions
   build:
     runs-on: ubuntu-latest
     steps:
@@ -24,9 +25,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run build
-        env:
-          VITE_BASE: /Orcal/
+      - run: node scripts/prepare-dev-index.mjs && VITE_BASE=/Orcal/ npx vite build
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
@@ -40,3 +39,4 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+        continue-on-error: true

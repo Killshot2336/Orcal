@@ -1,16 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import App from './App';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { SanctuaryProvider } from './hooks/SanctuaryContext';
 import './styles/global.css';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const rootEl = document.getElementById('root');
+
+if (!rootEl) {
+  throw new Error('Sanctuary root element #root was not found in index.html');
+}
+
+ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || undefined}>
-      <SanctuaryProvider>
-        <App />
-      </SanctuaryProvider>
-    </BrowserRouter>
+    <ErrorBoundary>
+      {/* HashRouter: required for GitHub project Pages (no server rewrite to index.html). */}
+      <HashRouter>
+        <SanctuaryProvider>
+          <App />
+        </SanctuaryProvider>
+      </HashRouter>
+    </ErrorBoundary>
   </React.StrictMode>,
 );

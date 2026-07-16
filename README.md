@@ -13,6 +13,17 @@ npm start
 
 The app opens at [http://localhost:5173](http://localhost:5173).
 
+### GitHub Pages
+
+This repo is configured for **legacy** Pages (`main` branch, `/` root).  
+After UI changes, publish a production build into the repo root:
+
+```bash
+npm run build:pages
+```
+
+That writes hashed bundles to `assets/` and a production `index.html` that loads `/Orcal/assets/...` (not raw `.tsx`). Local `npm start` restores the Vite entry via `index.dev.html`.
+
 | Script | Purpose |
 |---|---|
 | `npm start` / `npm run dev` | Launch Vite dev server |

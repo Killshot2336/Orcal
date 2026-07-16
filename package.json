@@ -1,13 +1,17 @@
 {
   "name": "sanctuary-web",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "description": "Sanctuary — a private two-person sacred space (React web SPA)",
   "scripts": {
+    "prestart": "node scripts/prepare-dev-index.mjs",
     "start": "vite",
+    "predev": "node scripts/prepare-dev-index.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/prepare-dev-index.mjs",
     "build": "tsc --noEmit && vite build",
+    "build:pages": "node scripts/prepare-dev-index.mjs && tsc --noEmit && VITE_BASE=/Orcal/ vite build && node scripts/publish-pages.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },
