@@ -52,6 +52,14 @@ export interface LinkPulse {
   createdAt: number;
 }
 
+export interface OracleRound {
+  question: string;
+  answer?: string;
+  topic: OracleTopic;
+  intensity: number;
+  at: number;
+}
+
 export interface SanctuaryState {
   pactAccepted: boolean;
   pin: string | null;
@@ -67,4 +75,5 @@ export interface SanctuaryState {
   links: LinkPulse[];
   lastOracleQuestion: string | null;
   lastOracleTone: string | null;
+  oracleHistory: OracleRound[];
 }

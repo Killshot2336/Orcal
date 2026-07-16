@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { ChamberShell } from '../components/ChamberShell';
 import { useSanctuary } from '../hooks/SanctuaryContext';
+import { playSfx } from '../lib/soundscape';
 
 export function DreamsPage() {
   const { state, addDream } = useSanctuary();
@@ -15,25 +16,24 @@ export function DreamsPage() {
     .map(([t]) => t);
 
   return (
-    <main style={{ maxWidth: 760, margin: '0 auto' }}>
-      <Link to="/" className="back-link">
-        ← Sanctuary
-      </Link>
-      <h1 className="title">Slumber Room</h1>
-      <p className="muted">
-        {shared.length
+    <ChamberShell
+      title="Slumber Room"
+      subtitle={
+        shared.length
           ? `Shared themes: ${shared.join(', ')}`
-          : 'Awaiting a shared dream constellation.'}
-      </p>
-
+          : 'Awaiting a shared dream constellation.'
+      }
+      atmosphere="dream"
+      chamberKey="dreams"
+    >
       <div style={{ display: 'grid', gap: 12, margin: '1.25rem 0' }}>
         {state.dreams.length === 0 ? (
-          <div className="panel">
+          <div className="panel glass">
             <p className="plaque">Night is unwritten. Offer a dream fragment.</p>
           </div>
         ) : (
           state.dreams.map((d) => (
-            <article key={d.id} className="panel">
+            <article key={d.id} className="panel glass">
               <p>{d.text}</p>
               <p className="muted">Themes · {d.themes.join(', ') || 'drifting'}</p>
             </article>
@@ -41,7 +41,7 @@ export function DreamsPage() {
         )}
       </div>
 
-      <section className="panel">
+      <section className="panel glass">
         <div className="field">
           <label htmlFor="dream">Transcribe a dream</label>
           <textarea
@@ -59,11 +59,12 @@ export function DreamsPage() {
             if (!text.trim()) return;
             addDream(text);
             setText('');
+            void playSfx('seal');
           }}
         >
           Weave into Night
         </button>
       </section>
-    </main>
+    </ChamberShell>
   );
 }

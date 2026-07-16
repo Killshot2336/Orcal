@@ -16,6 +16,7 @@ export const defaultState = (): SanctuaryState => ({
   links: [],
   lastOracleQuestion: null,
   lastOracleTone: null,
+  oracleHistory: [],
 });
 
 export function loadState(): SanctuaryState {

@@ -13,6 +13,7 @@ import type {
   LinkType,
   Memory,
   MemoryKind,
+  OracleRound,
   SanctuaryState,
   VaultEntry,
   VaultKind,
@@ -34,6 +35,8 @@ interface SanctuaryApi {
   unlockVault: (id: string, partnerKey: string) => void;
   addDream: (text: string) => void;
   setOracleResult: (question: string, tone: string) => void;
+  pushOracleRound: (round: OracleRound) => void;
+  answerLastOracle: (answer: string) => void;
   bumpHeartbeat: (by?: number) => void;
   resetAll: () => void;
 }
@@ -184,6 +187,26 @@ export function SanctuaryProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
+  const pushOracleRound = useCallback((round: OracleRound) => {
+    setState((s) => ({
+      ...s,
+      oracleHistory: [...(s.oracleHistory ?? []), round].slice(-40),
+      lastOracleQuestion: round.question,
+      lastOracleTone: s.lastOracleTone,
+      heartbeat: clampHeartbeat(s.heartbeat + 1),
+    }));
+  }, []);
+
+  const answerLastOracle = useCallback((answer: string) => {
+    setState((s) => {
+      const hist = [...(s.oracleHistory ?? [])];
+      if (!hist.length) return s;
+      const last = { ...hist[hist.length - 1]!, answer: answer.trim() };
+      hist[hist.length - 1] = last;
+      return { ...s, oracleHistory: hist };
+    });
+  }, []);
+
   const resetAll = useCallback(() => {
     const next = defaultState();
     setState(next);
@@ -205,6 +228,8 @@ export function SanctuaryProvider({ children }: { children: React.ReactNode }) {
       unlockVault,
       addDream,
       setOracleResult,
+      pushOracleRound,
+      answerLastOracle,
       bumpHeartbeat,
       resetAll,
     }),
@@ -222,6 +247,8 @@ export function SanctuaryProvider({ children }: { children: React.ReactNode }) {
       unlockVault,
       addDream,
       setOracleResult,
+      pushOracleRound,
+      answerLastOracle,
       bumpHeartbeat,
       resetAll,
     ],

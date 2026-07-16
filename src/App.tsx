@@ -1,4 +1,5 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { SacredBackground } from './components/SacredBackground';
 import { useSanctuary } from './hooks/SanctuaryContext';
 import { HomePage } from './pages/HomePage';
@@ -21,87 +22,91 @@ function Guard({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const location = useLocation();
+
   return (
     <div className="app-shell">
       <SacredBackground />
       <div className="content">
-        <Routes>
-          <Route path="/onboarding" element={<OnboardingPage />} />
-          <Route path="/pin" element={<PinPage />} />
-          <Route
-            path="/"
-            element={
-              <Guard>
-                <HomePage />
-              </Guard>
-            }
-          />
-          <Route
-            path="/vow-wall"
-            element={
-              <Guard>
-                <VowWallPage />
-              </Guard>
-            }
-          />
-          <Route
-            path="/loom"
-            element={
-              <Guard>
-                <LoomPage />
-              </Guard>
-            }
-          />
-          <Route
-            path="/oracle"
-            element={
-              <Guard>
-                <OraclePage />
-              </Guard>
-            }
-          />
-          <Route
-            path="/link"
-            element={
-              <Guard>
-                <LinkPage />
-              </Guard>
-            }
-          />
-          <Route
-            path="/vault"
-            element={
-              <Guard>
-                <VaultPage />
-              </Guard>
-            }
-          />
-          <Route
-            path="/observatory"
-            element={
-              <Guard>
-                <ObservatoryPage />
-              </Guard>
-            }
-          />
-          <Route
-            path="/dreams"
-            element={
-              <Guard>
-                <DreamsPage />
-              </Guard>
-            }
-          />
-          <Route
-            path="/temple"
-            element={
-              <Guard>
-                <TemplePage />
-              </Guard>
-            }
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/onboarding" element={<OnboardingPage />} />
+            <Route path="/pin" element={<PinPage />} />
+            <Route
+              path="/"
+              element={
+                <Guard>
+                  <HomePage />
+                </Guard>
+              }
+            />
+            <Route
+              path="/vow-wall"
+              element={
+                <Guard>
+                  <VowWallPage />
+                </Guard>
+              }
+            />
+            <Route
+              path="/loom"
+              element={
+                <Guard>
+                  <LoomPage />
+                </Guard>
+              }
+            />
+            <Route
+              path="/oracle"
+              element={
+                <Guard>
+                  <OraclePage />
+                </Guard>
+              }
+            />
+            <Route
+              path="/link"
+              element={
+                <Guard>
+                  <LinkPage />
+                </Guard>
+              }
+            />
+            <Route
+              path="/vault"
+              element={
+                <Guard>
+                  <VaultPage />
+                </Guard>
+              }
+            />
+            <Route
+              path="/observatory"
+              element={
+                <Guard>
+                  <ObservatoryPage />
+                </Guard>
+              }
+            />
+            <Route
+              path="/dreams"
+              element={
+                <Guard>
+                  <DreamsPage />
+                </Guard>
+              }
+            />
+            <Route
+              path="/temple"
+              element={
+                <Guard>
+                  <TemplePage />
+                </Guard>
+              }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </AnimatePresence>
       </div>
     </div>
   );

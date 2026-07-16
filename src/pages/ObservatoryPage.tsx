@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ChamberShell } from '../components/ChamberShell';
 import { useSanctuary } from '../hooks/SanctuaryContext';
 
 export function ObservatoryPage() {
@@ -31,7 +31,7 @@ export function ObservatoryPage() {
   }, [state]);
 
   const links = useMemo(() => {
-    const out: Array<[ (typeof stars)[0], (typeof stars)[0] ]> = [];
+    const out: Array<[(typeof stars)[0], (typeof stars)[0]]> = [];
     for (let i = 0; i < stars.length - 1; i += 1) {
       if (i % 2 === 0) out.push([stars[i]!, stars[i + 1]!]);
     }
@@ -39,20 +39,18 @@ export function ObservatoryPage() {
   }, [stars]);
 
   return (
-    <main style={{ maxWidth: 820, margin: '0 auto' }}>
-      <Link to="/" className="back-link">
-        ← Sanctuary
-      </Link>
-      <h1 className="title">The Observatory</h1>
-      <p className="muted">
-        Constellations from lived devotion · heartbeat {state.heartbeat}
-      </p>
-
+    <ChamberShell
+      title="The Observatory"
+      subtitle={`Constellations from lived devotion · heartbeat ${state.heartbeat}`}
+      atmosphere="stars"
+      chamberKey="observatory"
+      ambientOverride="observatory"
+    >
       <motion.div
-        className="panel"
+        className="panel glass"
         style={{ marginTop: '1.25rem', borderRadius: 999, overflow: 'hidden', padding: 0 }}
         animate={{ rotate: 360 }}
-        transition={{ duration: 48, repeat: Infinity, ease: 'linear' }}
+        transition={{ duration: 64, repeat: Infinity, ease: 'linear' }}
       >
         <svg viewBox="0 0 320 320" width="100%" height="360" role="img" aria-label="Star map">
           <circle
@@ -87,11 +85,10 @@ export function ObservatoryPage() {
           ))}
         </svg>
       </motion.div>
-
       <p style={{ marginTop: '1.25rem' }}>
         Your sky holds {stars.length} stars across vows, memories, dreams, vault trust, links, and
         pulse.
       </p>
-    </main>
+    </ChamberShell>
   );
 }

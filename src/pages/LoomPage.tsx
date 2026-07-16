@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { ChamberShell } from '../components/ChamberShell';
 import { useSanctuary } from '../hooks/SanctuaryContext';
 import type { MemoryKind } from '../lib/types';
+import { playSfx } from '../lib/soundscape';
+import { haptic } from '../lib/haptics';
+import { useMemo, useState } from 'react';
 
 const KINDS: MemoryKind[] = ['photo', 'voice', 'screenshot', 'video'];
 const COLORS: Record<MemoryKind, string> = {
@@ -33,14 +35,13 @@ export function LoomPage() {
   }, [state.memories]);
 
   return (
-    <main style={{ maxWidth: 900, margin: '0 auto' }}>
-      <Link to="/" className="back-link">
-        ← Sanctuary
-      </Link>
-      <h1 className="title">The Loom</h1>
-      <p className="muted">{status}</p>
-
-      <div className="panel" style={{ margin: '1.25rem 0', padding: 0, overflow: 'hidden' }}>
+    <ChamberShell
+      title="The Loom"
+      subtitle={status}
+      atmosphere="loom"
+      chamberKey="loom"
+    >
+      <div className="panel glass" style={{ margin: '1.25rem 0', padding: 0, overflow: 'hidden' }}>
         <svg viewBox="0 0 340 320" width="100%" height="340" role="img" aria-label="Memory tapestry">
           {nodes.map((a, i) =>
             nodes.slice(i + 1).map((b) => (
@@ -70,20 +71,14 @@ export function LoomPage() {
             onClick={() => {
               addMemory(kind, `${kind} woven at ${new Date().toLocaleTimeString()}`);
               setStatus(`Wove a ${kind} into the tapestry`);
+              void playSfx('whoosh');
+              haptic('tap');
             }}
           >
             Weave {kind}
           </button>
         ))}
       </div>
-
-      <ul className="muted" style={{ marginTop: '1.5rem', paddingLeft: '1.1rem' }}>
-        {state.memories.slice(0, 8).map((m) => (
-          <li key={m.id}>
-            {m.kind} — {m.caption}
-          </li>
-        ))}
-      </ul>
-    </main>
+    </ChamberShell>
   );
 }

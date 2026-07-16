@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { ChamberShell } from '../components/ChamberShell';
 import { useSanctuary } from '../hooks/SanctuaryContext';
 import type { VaultKind } from '../lib/types';
+import { playSfx } from '../lib/soundscape';
+import { haptic } from '../lib/haptics';
 
 const KINDS: VaultKind[] = ['vent', 'fear', 'trust', 'confession'];
 
@@ -14,13 +16,14 @@ export function VaultPage() {
 
   if (!gateOpen) {
     return (
-      <main style={{ maxWidth: 640, margin: '0 auto' }}>
-        <Link to="/" className="back-link">
-          ← Sanctuary
-        </Link>
-        <h1 className="title">Fortress Gate</h1>
+      <ChamberShell
+        title="Fortress Gate"
+        subtitle="Beyond this seal: vents, fears, and ultimate trust."
+        atmosphere="vault"
+        chamberKey="vault-gate"
+      >
         <p className="plaque" style={{ margin: '1.25rem 0' }}>
-          Beyond this seal: vents, fears, and ultimate trust. Two keys. One vault.
+          Two keys. One vault. Torchlight waits.
         </p>
         <button
           className="cta"
@@ -28,6 +31,8 @@ export function VaultPage() {
           onClick={() => {
             setGateOpen(true);
             setStatus('Gate open for you. Partner unlock still required per entry.');
+            void playSfx('seal');
+            haptic('success');
           }}
         >
           Present Presence
@@ -35,28 +40,22 @@ export function VaultPage() {
         <p className="muted" style={{ marginTop: '1rem' }}>
           {status}
         </p>
-      </main>
+      </ChamberShell>
     );
   }
 
   return (
-    <main style={{ maxWidth: 760, margin: '0 auto' }}>
-      <Link to="/" className="back-link">
-        ← Sanctuary
-      </Link>
-      <h1 className="title">The Vault</h1>
-      <p className="muted">{status}</p>
-
+    <ChamberShell title="The Vault" subtitle={status} atmosphere="vault" chamberKey="vault">
       <div style={{ display: 'grid', gap: 12, margin: '1.25rem 0' }}>
         {state.vault.length === 0 ? (
-          <div className="panel">
+          <div className="panel glass">
             <p className="plaque">Nothing sealed yet.</p>
           </div>
         ) : (
           state.vault.map((entry) => {
             const open = entry.unlockedBy.length >= 2;
             return (
-              <article key={entry.id} className="panel">
+              <article key={entry.id} className="panel glass">
                 <p className="muted">
                   {entry.kind.toUpperCase()} · keys {entry.unlockedBy.length}/2
                 </p>
@@ -69,6 +68,8 @@ export function VaultPage() {
                     onClick={() => {
                       unlockVault(entry.id, 'partner');
                       setStatus('Mutual unlock complete — trust space open.');
+                      void playSfx('success');
+                      haptic('success');
                     }}
                   >
                     Simulate partner unlock
@@ -80,7 +81,7 @@ export function VaultPage() {
         )}
       </div>
 
-      <section className="panel">
+      <section className="panel glass">
         <div className="chip-row" style={{ marginBottom: '1rem' }}>
           {KINDS.map((k) => (
             <button
@@ -110,11 +111,13 @@ export function VaultPage() {
             addVault(kind, text);
             setText('');
             setStatus('Sealed. Awaiting second key.');
+            void playSfx('seal');
+            haptic('tap');
           }}
         >
           Seal Entry
         </button>
       </section>
-    </main>
+    </ChamberShell>
   );
 }

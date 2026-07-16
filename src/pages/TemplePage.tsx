@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { ChamberShell } from '../components/ChamberShell';
 import { askOracle } from '../lib/oracle';
 import { useSanctuary } from '../hooks/SanctuaryContext';
+import { playSfx } from '../lib/soundscape';
+import { haptic } from '../lib/haptics';
 
 const REGIONS = [
   { id: 'crown', label: 'Crown', x: 50, y: 8 },
@@ -22,11 +24,14 @@ export function TemplePage() {
 
   async function touch(label: string) {
     setRegion(label);
+    void playSfx('oracle');
+    haptic('tap');
     const res = await askOracle({
       bondId: state.bondId || 'local-bond',
       topic: 'naughty_exploration',
       intensity: 6,
       compass: 'Desire',
+      history: state.oracleHistory?.slice(-5),
       recentVowSummaries: [`body region: ${label}`],
     });
     setQuestion(res.question);
@@ -34,15 +39,12 @@ export function TemplePage() {
   }
 
   return (
-    <main style={{ maxWidth: 720, margin: '0 auto' }}>
-      <Link to="/" className="back-link">
-        ← Sanctuary
-      </Link>
-      <h1 className="title">The Temple</h1>
-      <p className="muted">
-        {region ? `Region · ${region}` : 'Artistic silhouette · consent-first'}
-      </p>
-
+    <ChamberShell
+      title="The Temple"
+      subtitle={region ? `Region · ${region}` : 'Artistic silhouette · consent-first'}
+      atmosphere="temple"
+      chamberKey="temple"
+    >
       <div
         style={{
           position: 'relative',
@@ -83,9 +85,9 @@ export function TemplePage() {
         ))}
       </div>
 
-      <section className="panel">
+      <section className="panel glass">
         <p className="plaque">{question}</p>
       </section>
-    </main>
+    </ChamberShell>
   );
 }
