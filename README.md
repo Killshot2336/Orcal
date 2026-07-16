@@ -1,126 +1,68 @@
-# Sanctuary
+# Sanctuary (Web)
 
-A private, two-person mobile application — a digital sacred space for one deeply connected couple. No ads. No third-party analytics. No social sharing. End-to-end encryption. Built to feel like a divine artifact made only for them.
+A private, two-person **React web application** — a digital sacred space you can open in your browser.
 
-## Stack
+No ads. No third-party analytics. No social sharing. Your bond data stays in this browser (localStorage).
 
-| Layer | Technology |
-|---|---|
-| Mobile | React Native (Expo 52), Expo Router, Reanimated 3, Gesture Handler, Lottie, Secure Store |
-| Backend | Firebase Auth (anonymous + PIN gate), Firestore, Storage, Cloud Functions |
-| Crypto | AES-256-GCM Cosmic Key (device SecureStore only), PIN stretch, HMAC Link signatures |
-| AI | Private Oracle API via Cloud Function `sanctuaryOracle` (offline poetic bank as fortress fallback) |
-| Simulation | Dual-user 90-day world model + stress suite (`simulation/`) |
-
-## Feature map (build order)
-
-1. **Sacred Pact** — cinematic intro, shared vow, PIN gate (no traditional login)
-2. **The Sanctuary** — living background, Heartbeat widget, gesture navigation
-3. **Vow Wall 2.0** — parallax plaque hallway, Daily / Sacred / Desire, Cherish bloom
-4. **The Loom** — memory tapestry (photo / voice / screenshot / video threads)
-5. **Oracle’s Chamber** — Topic Wheel + private AI questions
-6. **The Link** — I’m Thinking of You pulses (Haptic Whisper, Emoji Touch, Heartbeat Presence)
-7. **The Vault** — biometric gate + two-person unlock for vents / fears / trust
-8. **Observatory** — star map / orrery from relationship metrics
-9. **Slumber Room** — dream capture + shared theme constellation
-10. **The Temple** — respectful body-map silhouette → Oracle prompts
-
-## Repository layout
-
-```
-apps/sanctuary/          Expo React Native app
-packages/shared/         Types, crypto, Oracle prompt + engine
-functions/               Firebase Cloud Functions (fortress edge)
-simulation/              90-day dual-user sim + stress tests
-docs/                    Design notes + simulation reports
-firestore.rules          Bond-scoped security rules
-storage.rules            Encrypted blob limits (≤55MB)
-```
-
-> Note: A real React Native + Firebase product cannot ship as one literal source file. This monorepo is the ready-to-deploy unit. Shared domain logic is centralized in `@sanctuary/shared`.
-
-## Setup
-
-### Prerequisites
-
-- Node 20+
-- npm 10+
-- Expo CLI / Expo Go for device preview
-- Firebase project (Blaze if using remote Oracle API)
-
-### Install
+## Quick start
 
 ```bash
 npm install
-cp .env.example .env
+npm start
 ```
 
-Fill Firebase public keys into `.env` / EAS secrets. Keep `SANCTUARY_ORACLE_*` **only** on Cloud Functions config — never in the mobile bundle.
+The app opens at [http://localhost:5173](http://localhost:5173).
 
-```bash
-firebase functions:config:set sanctuary.oracle_url="https://your-private-endpoint" sanctuary.oracle_key="..."
-# or prefer modern secrets:
-firebase functions:secrets:set SANCTUARY_ORACLE_API_KEY
-```
-
-### Run mobile
-
-```bash
-npm run mobile
-```
-
-Demo path: onboarding → **Open simulation chamber** skips pact/PIN for UI review.
-
-### Deploy fortress
-
-```bash
-npm run functions:build
-firebase deploy --only functions,firestore:rules,storage
-```
-
-### Simulation & stress
-
-```bash
-npm run simulate
-npm run simulate:stress
-# or
-npm run audit:actions
-```
-
-Reports write to `simulation/output/`:
-
-- `simulation-90-day.md` / `.json`
-- `stress-report.md` / `.json`
-
-## Privacy fortress
-
-- Anonymous Firebase Auth + local PIN / biometric gate (no email/password theater)
-- Couple Cosmic Key generated on-device; only fingerprint stored in Firestore
-- Vows, vault, dreams encrypted before leave the device
-- Firestore rules: bond membership required; rate-limit docs server-only
-- Storage: ciphertext-oriented content types, 55MB ceiling (covers 50MB Loom stress)
-- Link pulses HMAC-signed; Cloud Function caps 100/min/bond
-- Oracle: ephemeral inference; meta audit stores topic/tone only — never vault plaintext
-
-## Oracle system prompt
-
-Canonical prompt lives in `packages/shared/src/oracle-prompt.ts` (`ORACLE_SYSTEM_PROMPT`). Cloud Functions and the offline engine share it.
-
-## Design language
-
-Warm dusk sanctuary — deep forest slate, honey amber, soft rose, sage. Display serif elegance (Cormorant / Source Serif). Breathing orbs, Heartbeat pulse, Cherish bloom, orrery drift. No purple-glow UI kits, no analytics chrome, no public social patterns.
-
-## Scripts
-
-| Command | Purpose |
+| Script | Purpose |
 |---|---|
-| `npm run mobile` | Expo dev server |
-| `npm run functions:build` | Compile Cloud Functions |
-| `npm run simulate` | 90-day User A / User B simulation |
-| `npm run simulate:stress` | Link / Loom / Vault stress |
-| `npm run audit:actions` | Full simulation gate |
-| `npm test` | Workspace tests |
+| `npm start` / `npm run dev` | Launch Vite dev server |
+| `npm run build` | Production build → `dist/` |
+| `npm run preview` | Preview the production build |
 
-## License
+## Features
 
-Private bond software — not for redistribution. All rights reserved to the couple who holds the pact.
+1. **Sacred Pact** — cinematic vow onboarding (no traditional login)
+2. **PIN gate** — private 4–6 digit unlock
+3. **Home Heartbeat** — living pulse of the bond
+4. **Vow Wall** — Daily / Sacred / Desire plaques + Cherish bloom
+5. **The Loom** — memory tapestry threads
+6. **Oracle’s Chamber** — Topic Tapestry, Intensity slider, Compass, AI questions
+7. **The Link** — I’m Thinking of You pulses
+8. **The Vault** — two-key trust space
+9. **Observatory** — constellation sky from your activity
+10. **Slumber Room** & **Temple** — dreams + sacred body map
+
+## Oracle API (optional)
+
+By default the Oracle uses a beautiful offline question bank (works with zero config).
+
+To point at your private API:
+
+```bash
+cp .env.example .env
+# set VITE_ORACLE_API_URL=https://your-private-oracle-endpoint
+```
+
+The client POSTs JSON shaped like an OpenAI-compatible chat completion (or a direct `{ question, followUps, tone }` body). If the network call fails, Sanctuary falls back offline.
+
+## Stack
+
+- React 18 + TypeScript
+- Vite 6
+- React Router
+- Framer Motion
+
+## Privacy
+
+- Couple content is stored locally in your browser only
+- No analytics SDKs
+- Reset clears the Sanctuary from this device
+
+## ZIP package
+
+If you received `Sanctuary-Web-App.zip`:
+
+1. Unzip
+2. `cd Sanctuary-Web-App` (or the unzipped folder name)
+3. `npm install`
+4. `npm start`

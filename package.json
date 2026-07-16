@@ -1,28 +1,30 @@
 {
-  "name": "sanctuary",
+  "name": "sanctuary-web",
   "version": "1.0.0",
   "private": true,
-  "description": "Sanctuary — a private, two-person digital sacred space",
-  "workspaces": [
-    "apps/sanctuary",
-    "packages/shared",
-    "functions",
-    "simulation"
-  ],
+  "type": "module",
+  "description": "Sanctuary — a private two-person sacred space (React web SPA)",
   "scripts": {
-    "postinstall": "npm run build --workspace=@sanctuary/shared",
-    "mobile": "npm run start --workspace=@sanctuary/mobile",
-    "mobile:ios": "npm run ios --workspace=@sanctuary/mobile",
-    "mobile:android": "npm run android --workspace=@sanctuary/mobile",
-    "functions:build": "npm run build --workspace=@sanctuary/shared && npm run build --workspace=@sanctuary/functions",
-    "functions:serve": "npm run serve --workspace=@sanctuary/functions",
-    "simulate": "npm run simulate --workspace=@sanctuary/simulation",
-    "simulate:stress": "npm run stress --workspace=@sanctuary/simulation",
-    "typecheck": "npm run typecheck --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
-    "audit:actions": "npm run simulate && npm run simulate:stress"
+    "start": "vite",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "framer-motion": "^11.15.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.6"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=18"
   }
 }
